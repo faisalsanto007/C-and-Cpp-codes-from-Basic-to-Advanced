@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include<graphics.h>
+
+void clip(int, int, int, int);
+
+int xwmin, xwmax, ywmin, ywmax;
+int gd=DETECT, gm, x1, y1, x2, y2;
+
+int main()
+{
+    initgraph(&gd,&gm,"C:\\TC\\BGI");
+
+    printf("Enter the window coordinates: ");
+    scanf("%d %d %d %d", &xwmin, &ywmin, &xwmax, &ywmax);
+
+    printf("\nEnter the line coordinates: ");
+    scanf("%d %d %d %d", &x1, &y1, &x2, &y2);
+
+    printf("\n");
+
+    outtextxy(100, 10, "Before clipping");
+    rectangle(xwmin, ywmin, xwmax, ywmax);
+    line(x1, y1, x2, y2);
+
+    getch();
+    cleardevice();
+
+    printf("\n\n");
+
+    outtextxy(100, 10, "After clipping");
+    clip(x1, y1, x2, y2);
+
+    getch();
+    return 0;
+}
+
+
+void clip(int x1, int y1, int x2, int y2)
+{
+    int x, y, c, c1, c2, m;
+
+    int code(int, int);
+    c1=code(x1, y1);
+    c2=code(x2, y2);
+
+    while((c1!=0)||(c2!=0))
+    {
+        if((c1&c2)!=0)
+        {
+            rectangle(xwmin,ywmin,xwmax,ywmax);
+        }
+        m=(y2-y1)/(x2-x1);
+        c=c1;
+        if(c==0)
+            c=c2;
+        if(c&1)
+        {
+            x=xwmin;
+            y=y1+(xwmin-x1)*m;
+        }
+        else if(c&2)
+        {
+            x=xwmax;
+            y=y1+(xwmax-x1)*m;
+        }
+        else if(c&4)
+        {
+            y=ywmin;
+            x=x1+(ywmin-y1)/m;
+        }
+        else if(c&8)
+        {
+            y=ywmax;
+            x=x1+(ywmax-y1)/m;
+        }
+        if(c==c1)
+        {
+            x1=x;
+            y1=y;
+            c1=code(x,y);
+        }
+        else
+        {
+            x2=x;
+            y2=y;
+            c2=code(x,y);
+        }
+
+        line(x1,y1,x2,y2);
+        rectangle(xwmin,ywmin,xwmax,ywmax);
+    }
+}
+
+int code(int x, int y)
+{
+    int c=0;
+    if(x<xwmin)
+        c=1;
+    else if(x>xwmax)
+        c=2;
+    else if(y<ywmin)
+        c=c+4;
+    else if(y>ywmax)
+        c=c+8;
+    return(c);
+}
+

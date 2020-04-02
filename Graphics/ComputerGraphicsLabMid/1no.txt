@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+#include<graphics.h>
+#include<stdio.h>
+#include<conio.h>
+using namespace std;
+
+int main()
+{
+    int x,y, x1, x2, y1, y2;
+    int gd=DETECT,gm;
+    initgraph(&gd, &gm , "C:\\TC\\BGI");
+    line(getmaxx()/2,0, getmaxx()/2, getmaxy());
+    line(0,getmaxy()/2,getmaxx(), getmaxy()/2);
+    printf("Enter adress of point  x,y    :");
+    scanf("%d%d",&x,&y);
+    putpixel(x,y,10);
+
+    printf("Enter coordinates of line x1, y1, x2, y2    :");
+    scanf("%d%d%d%d", &x1,&y1, &x2,&y2);
+    line(x1, x2, y1, y2);
+
+    //direction
+    int d = (( x - x1)*(y2-y1)) - ((y-y1)*(x2-x1));
+    if(d<0)
+         printf("point lies on left of the line\n");
+    else if(d>0)
+        printf("point lies on right of the line\n");
+    else{
+        printf("POint  is on the line\n");
+    }
+
+    getch();
+    closegraph();
+
+}

@@ -1,0 +1,76 @@
+#include<bits/stdc++.h>
+#include<graphics.h>
+using namespace std;
+const int INSIDE = 0; // 0000
+const int LEFT = 1;   // 0001
+const int RIGHT = 2;  // 0010
+const int BOTTOM = 4; // 0100
+const int TOP = 8;    // 1000
+
+// Defining x_max, y_max and x_min, y_min for
+// clipping rectangle. Since diagonal points are
+// enough to define a rectangle
+const int x_max = 10;
+const int y_max = 8;
+const int x_min = 4;
+const int y_min = 4;
+
+// Function to compute region code for a point(x, y)
+int computeCode(int x, int y)
+{
+    // initialized as being inside
+    int code = INSIDE;
+    if (x < x_min)       // to the left of rectangle
+    {
+        code |= LEFT;
+
+    }
+    else if (x > x_max)  // to the right of rectangle
+    {
+        code |= RIGHT;
+
+    }
+    if (y < y_min)       // below the rectangle
+    {
+        code |= BOTTOM;
+
+    }
+    else if (y > y_max)  // above the rectangle
+    {
+        code |= TOP;
+
+    }
+    //cout<<code;
+    return code;
+}
+
+int main()
+{
+    int gd = DETECT, gm;
+    //initgraph(&gd, &gm, "");
+    int x1,x2,y1,y2;
+    int c1,c2;
+
+    scanf("%d%d%d%d",&x1,&y1,&x2,&y2);
+    c1=computeCode(x1,y1);
+    c2=computeCode(x2,y2);
+
+    printf("CODE %d %d\n",c1 , c2);
+    int l=c1 & c2;
+    cout<<l;
+
+    if(c1==0&&c2==0)
+        cout<<"VISIBLE\n";
+    else if(l==0)
+        cout<<"CLIPING\n";
+    else
+        cout<<"NOT VISIBLE"<<endl;
+   // getch();
+    //closegraph();
+}
+/*Input
+8 5 5 5 visible
+8 5 2 2 clip
+10 9 8 10 not visible
+
+*/
